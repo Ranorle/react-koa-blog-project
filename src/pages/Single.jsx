@@ -6,7 +6,7 @@ import Menu from "../components/Menu"
 import axios from "axios";
 import moment from "moment";
 import {AuthContext} from "../context/authContext";
-
+import DOMPurify from "dompurify";
 const Single =()=>{
     const [post,setPost] = useState({})
 
@@ -39,28 +39,36 @@ const Single =()=>{
         }
     }
 
+    // console.log(post.title)
     return<div className='single'>
         <div className='singlecontent'>
-            <img src={post?.img}/>
+            <img src={`../upload/${post?.img}`}/>
             <div className='user'>
                 {post.userImg &&<img src={post.userImg}/>}
             <div className="info">
                 <span>{post.username}</span>
                 <p>Posted {moment(post.date).fromNow()}</p>
             </div>
-                {/*{currentUser.username=== post.username && */}
+                {currentUser.username=== post.username &&
                     <div className="edit">
-                    <Link to={`/write?edit=2`}>
+                    <Link to={`/write?edit=2`} state={post}>
                         <Button type="primary" shape="circle" icon={<EditOutlined />} size='large' ghost/>
                     </Link>
                         <Button onClick={handleDelete} type="primary" shape="circle" icon={<DeleteOutlined />} size='large' ghost/>
                 </div>
-                {/*}*/}
+                }
         </div>
-            <h1>{post.title}</h1>
-                {post.desc}
+            <h1 dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(post.title),
+            }}
+            ></h1>
+            <p
+            dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(post.desc),
+        }}
+            ></p>
         </div>
-        <Menu/>
+        <Menu cat={post.cat}/>
     </div>
 }
 export default Single
