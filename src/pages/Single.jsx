@@ -19,20 +19,20 @@ const Single =()=>{
     const {currentUser} =useContext(AuthContext)
 
     useEffect(()=>{
-        const fetchData=async ()=>{
-            try{
-                const res=await axios.delete(`/posts/${postId}`)
-                navigator
-            }catch(err){
-                console.log(err)
+        const fetchData = async () => {
+            try {
+                const res = await axios.get(`/posts/${postId}`);
+                setPost(res.data);
+            } catch (err) {
+                console.log(err);
             }
-        }
+        };
         fetchData()
     },[postId])
 
     const handleDelete=async ()=>{
         try{
-            const res=await axios.get(`/posts/${postId}`)
+            await axios.delete(`/posts/${postId}`)
             navigate("/")
         }catch(err){
             console.log(err)
@@ -48,12 +48,14 @@ const Single =()=>{
                 <span>{post.username}</span>
                 <p>Posted {moment(post.date).fromNow()}</p>
             </div>
-                {currentUser.username=== post.username && <div className="edit">
+                {/*{currentUser.username=== post.username && */}
+                    <div className="edit">
                     <Link to={`/write?edit=2`}>
-                        <Button type="primary" shape="circle" icon={<DeleteOutlined />} size='large' ghost/>
+                        <Button type="primary" shape="circle" icon={<EditOutlined />} size='large' ghost/>
                     </Link>
-                        <Button onClick={handleDelete} type="primary" shape="circle" icon={<EditOutlined />} size='large' ghost/>
-                </div>}
+                        <Button onClick={handleDelete} type="primary" shape="circle" icon={<DeleteOutlined />} size='large' ghost/>
+                </div>
+                {/*}*/}
         </div>
             <h1>{post.title}</h1>
                 {post.desc}
