@@ -1,5 +1,6 @@
 import {db} from "../db.js"
 import bcrypt from "bcryptjs"
+import jwt from "jsonwebtoken"
 export const register=(req,res)=>{
 //check existing user
     const q ="SELECT * FROM users WHERE email = ? OR username = ?"
@@ -24,8 +25,27 @@ export const register=(req,res)=>{
     })
 }
 export const login=(req,res)=>{
-//检查是否存在
+//检查是否存在用户
+    const q = "SELECT * FROM users WHERE username = ?"
+    db.query(q,[req.body.username],(err,data)=>{
+        if(err) return res.status(500).json(err);
+        if(data.length ===0) return res.status(404).json("未找到用户")
+        //检查密码
+        const isPasswordCorrect=bcrypt.compareSync(req.body.password,data[0].password)
+        if(!isPasswordCorrect) return res.status(400).json("密码错误或用户名不正确")
+
+    const token=jwt.sign({id:data[0].id},"jwtkey")
+    const {password,...other} =data[0] //过滤数据库密码
+        res.cookie("access_token",token,{
+            httpOnly:true,
+        }).status(200).json(other)
+    })
+
 }
 export const logout=(req,res)=>{
+res.clearCookie("access_token",{
+    sameSite:"none",
+        secure:true
+    }).status(200).json("用户注销成功")
 
 }
