@@ -10,8 +10,10 @@ const Navbar =()=>{
     return<div className='navbar'>
         <div className='container'>
             <div className='logo'>
-                <img src={Logo1} />
-                <img src={Logo2}/>
+                <Link to="/">
+                    <img src={Logo1} />
+                    <img src={Logo2}/>
+                </Link>
             </div>
             <div className='links'>
                 <Link className='link' to='/?cat=blogs'><h6>博客</h6></Link>
