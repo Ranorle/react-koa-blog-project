@@ -1,6 +1,12 @@
 import React, {useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import axios from "axios";
+import {Carousel, Input} from "antd";
+import login_1 from "../img/login_1.png";
+import login_2 from "../img/Login_2.png";
+import login_3 from "../img/Login_3.png";
+import Logo2 from "../img/logo2.png";
+import beianimg from "../img/beianimg.png";
 const Register =()=>{
     const [inputs,setInputs]=useState({
         username:"",
@@ -28,15 +34,39 @@ const Register =()=>{
     // console.log(inputs)
 
     return<div className='auth'>
-        <h1>Register</h1>
+        <div className='authDiv'>
+            <div className='carouselDiv'>
+                <Carousel autoplay>
+                    <div>
+                        <img src={login_1} className='carousel'/>
+                    </div>
+                    <div>
+                        <img src={login_2} className='carousel'/>
+                    </div>
+                    <div>
+                        <img src={login_3} className='carousel'/>
+                    </div>
+                </Carousel>
+            </div>
+            <div className='inputDiv'>
+                <Link to="/"> <img src={Logo2}/></Link>
+                <h1>Welcome to Ranorle's Blog!</h1>
+        <h2>欢 迎 注 册</h2>
         <form>
-            <input required type="text" placeholder='username' name="username" onChange={handleChange}/>
-            <input required type="email" placeholder='email' name='email' onChange={handleChange}/>
-            <input required type="password" placeholder='password' name='password' onChange={handleChange}/>
+            <Input required type="text" placeholder='username' name="username" onChange={handleChange}/>
+            <Input required type="email" placeholder='email' name='email' onChange={handleChange}/>
+            <Input.Password size="large" required type="password" placeholder='password' name='password' onChange={handleChange}/>
             <button onClick={handleSubmit}>Register</button>
             {err && <p>{err}</p>}
             <span>如果你有一个账户，请前往<Link to="/login">登陆界面</Link></span>
         </form>
+            </div>
+        </div>
+        <div className='pagefootinfo2'>
+            <div className='beian2'>
+                <a href="https://beian.miit.gov.cn/#/Integrated/index"><p>京ICP备2022029720号-1 | </p></a><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010802040838"><img src={beianimg}/><p>京公网安备 11010802040838号</p></a>
+            </div>
+        </div>
     </div>
 }
 export default Register
