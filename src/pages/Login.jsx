@@ -39,7 +39,7 @@ const Login =()=>{
                 content: '正在登录',
                 duration: 1.2,
             })
-                .then(() => {message.success('Loading finished', 2.5)
+                .then(() => {message.success('登录成功', 2.5)
                     navigate("/")
                 })
             // console.log(res)
@@ -86,7 +86,7 @@ const Login =()=>{
     </div>
         <div className='pagefootinfo2'>
             <div className='beian2'>
-                <a href="https://beian.miit.gov.cn/#/Integrated/index"><p>京ICP备2022029720号-1 | </p></a><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010802040838"><img src={beianimg}/><p>京公网安备 11010802040838号</p></a>
+                <p>Ranorle (●'◡'●)</p><a href="https://beian.miit.gov.cn/#/Integrated/index"><p>| 京ICP备2022029720号-1 | </p></a><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010802040838"><img src={beianimg}/><p>京公网安备 11010802040838号</p></a>
             </div>
         </div>
     </div>

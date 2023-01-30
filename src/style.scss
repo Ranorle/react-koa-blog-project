@@ -125,41 +125,68 @@ $lightGreen: #b9e7e7;
       }
       }
     .navbar{
+      height: 87.09px;
       .container{
-        padding: 10px 0px;
+        height: 87.09px;
         display: flex;
         align-items: center;
         justify-content: space-between;
+        box-shadow:0 4px 3px 0 rgba(0, 0, 0, 0.0005), 0 6px 1px 0 rgba(0, 0, 0, 0.04);
         .logo{
+          padding-left: 30px;
           img{
             width:140px;
           }
         }
         .links{
+          height: 87.09px;
+          padding-right: 40px;
           display:flex ;
           align-items: center;
           gap:20px;
-          h6{
-            font-size: 20px;
-            font-weight: 300;
-          }
-          span{
-            cursor: pointer;
-          }
-          .write{
-            background-color: #b9e7e7;
-            width: 50px;
-            height:50px;
-            border-radius: 50%;
+          .linksDiv{
+            height: 87.09px;
             display: flex;
+            flex-direction: row;
+            .linkDiv{
+              height: 87.09px;
+              width:88px;
+              height: 100%;
+              transition: all .4s;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              h6{
+                font-size: 24px;
+                font-weight: 300;
+              }
+            }
+            .linkDiv:hover {
+              height: 87.09px;
+              background-color: rgba(0, 0, 0, 0.3);
+              width: 100px;
+             shadow: 0 1px 2px -2px rgb(0 0 0 / 16%), 0 3px 6px 0 rgb(0 0 0 / 12%), 0 5px 12px 4px rgb(0 0 0 / 9%);
+              transition: all .4s;
+              cursor: pointer;
+            }
+          }
+          .navuserinfo{
+            display: flex;
+            flex-direction: row;
             align-items: center;
             justify-content: center;
-            font-weight: 300;
-            border:1px solid white;
-            &:hover{
-              color: teal;
-              background-color: white;
-              border:1px solid teal;
+            gap:20px;
+            p{
+              cursor: pointer;
+              font-size: 20px;
+              font-weight: 300;
+            }
+            img{
+              cursor: pointer;
+              width:50px;
+              height:50px;
+              border-radius: 50%;
+              object-fit: cover;
             }
           }
         }

@@ -7,6 +7,7 @@ import axios from "axios";
 import moment from "moment";
 import {AuthContext} from "../context/authContext";
 import DOMPurify from "dompurify";
+
 const Single =()=>{
     const [post,setPost] = useState({})
 
@@ -16,7 +17,15 @@ const Single =()=>{
 
     const postId =location.pathname.split("/")[2]
 
-    const {currentUser} =useContext(AuthContext)
+    let {currentUser} =useContext(AuthContext)
+    if(currentUser===null) currentUser={ //为解决currentUser不存在会导致single页面无法显示的bug
+        "id": 0,
+        "username": "",
+        "email": "",
+        "img": ""
+    }
+
+    // console.log(currentUser)
 
     useEffect(()=>{
         const fetchData = async () => {
@@ -49,7 +58,7 @@ const Single =()=>{
                 <span>{post.username}</span>
                 <p>Posted {moment(post.date).fromNow()}</p>
             </div>
-                {currentUser.username=== post.username &&
+                { currentUser.username=== post.username &&
                     <div className="edit">
                     <Link to={`/write?edit=2`} state={post}>
                         <Button type="primary" shape="circle" icon={<EditOutlined />} size='large' ghost/>
