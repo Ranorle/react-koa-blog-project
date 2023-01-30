@@ -2,7 +2,7 @@ import React, {useContext, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import axios from "axios";
 import {AuthContext} from "../context/authContext";
-import { Carousel,Input } from 'antd';
+import { Carousel,Input,message } from 'antd';
 import Logo2 from "../img/logo2.png"
 import Footer from "../components/Footer";
 import beianimg from "../img/beianimg.png";
@@ -14,6 +14,9 @@ const Login =()=>{
         username:"",
         password:"",
     })
+
+//这是顶部通知组件
+    const [messageApi, contextHolder] = message.useMessage();
 
     const [err,setError]=useState(null)
 
@@ -30,14 +33,30 @@ const Login =()=>{
         e.preventDefault()
         try {
              await login(inputs)
+
+            messageApi.open({
+                type: 'loading',
+                content: '正在登录',
+                duration: 1.2,
+            })
+                .then(() => {message.success('Loading finished', 2.5)
+                    navigate("/")
+                })
             // console.log(res)
-            navigate("/")
         }catch (err){
             setError(err.response.data);
+            messageApi.open({
+                type: 'loading',
+                content: '正在登录',
+                duration: 0.4,
+            })
+                .then(() => {message.info(err.response.data, 2.5)})
         }
+
     }
     // console.log(inputs)
     return<div className='auth'>
+        {contextHolder}
         <div className='authDiv'>
             <div className='carouselDiv'>
                 <Carousel autoplay>
@@ -60,7 +79,7 @@ const Login =()=>{
             <Input required  type="text" placeholder='username' name='username' onChange={handleChange}/>
             <Input.Password required size="large" type="text" placeholder='password' name='password' onChange={handleChange}/>
             <button onClick={handleSubmit}>Login</button>
-            {err && <p>{err}</p>}
+            {/*{err && <p>{err}</p>}*/}
             <span>没有账户？<Link to="/register">注册一个</Link></span>
         </form>
         </div>

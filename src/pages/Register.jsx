@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import axios from "axios";
-import {Carousel, Input} from "antd";
+import {Carousel, Input,Modal} from "antd";
 import login_1 from "../img/login_1.png";
 import login_2 from "../img/Login_2.png";
 import login_3 from "../img/Login_3.png";
@@ -13,6 +13,17 @@ const Register =()=>{
         email:"",
         password:"",
     })
+    //拦截注册
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
+    const handleOk = () => {
+        setIsModalOpen(false);
+    };
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
 
     const [err,setError]=useState(null)
 
@@ -56,7 +67,11 @@ const Register =()=>{
             <Input required type="text" placeholder='username' name="username" onChange={handleChange}/>
             <Input required type="email" placeholder='email' name='email' onChange={handleChange}/>
             <Input.Password size="large" required type="password" placeholder='password' name='password' onChange={handleChange}/>
-            <button onClick={handleSubmit}>Register</button>
+            {/*<button onClick={handleSubmit}>Register</button>*/}
+            <button onClick={showModal}>Register</button>
+            <Modal title="肥肠抱歉" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+                <p>注册功能未开放，请与管理者联系</p>
+            </Modal>
             {err && <p>{err}</p>}
             <span>如果你有一个账户，请前往<Link to="/login">登陆界面</Link></span>
         </form>

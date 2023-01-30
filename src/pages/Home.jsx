@@ -6,6 +6,7 @@ const Home =()=>{
 
     const cat = useLocation().search
 
+
     useEffect(()=>{
         const fetchData=async ()=>{
             try{
@@ -17,25 +18,13 @@ const Home =()=>{
         }
         fetchData()
     },[cat])
-    // const posts=[
-    //     {
-    //         id:1,
-    //         title:"Title1",
-    //         desc:"description1",
-    //         img:"https://tse4-mm.cn.bing.net/th/id/OIP-C.z6_kUv_ooQ5hj77LWxKzLAHaD5?pid=ImgDet&rs=1"
-    //     },
-    //     {
-    //         id:2,
-    //         title:"Title2",
-    //         desc:"description2",
-    //         img:"https://tse1-mm.cn.bing.net/th/id/OIP-C.ksV-Z2AQE9q-XxDAqHtd-gHaGI?pid=ImgDet&rs=1"
-    //     }
-    // ]
 
     const getText = (html) =>{
         const doc = new DOMParser().parseFromString(html, "text/html")
         return doc.body.textContent
     }
+
+
 
     return<div className='home'>
         <div className='posts'>
