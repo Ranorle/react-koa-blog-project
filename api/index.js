@@ -22,7 +22,10 @@ const upload = multer({ storage });
 
 app.post("/api/upload", upload.single("file"), function (req, res) {
     const file = req.file;
-    res.status(200).json(file.filename);
+    let x
+    if(file) x=file.filename
+    if(!file) x='no files'
+    res.status(200).json(x);
 });
 
 app.use("/api/auth",authRoutes)

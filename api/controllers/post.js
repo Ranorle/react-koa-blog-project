@@ -12,7 +12,7 @@ export const getPosts=(req,res)=>{
 
 }
 export const getPost=(req,res)=>{
-    const q ="SELECT p.id, `introduction`,`username`, `title`, `desc`, p.img ,u.img AS userImg,`cat`, `date` FROM users u JOIN posts p ON u.id=p.uid WHERE p.id= ?"
+    const q ="SELECT p.id, `introduction`,`tags`,`username`, `title`, `desc`, p.img ,u.img AS userImg,`cat`, `date` FROM users u JOIN posts p ON u.id=p.uid WHERE p.id= ?"
     db.query(q,[req.params.id],(err,data)=>{
         if(err) return res.status(500).json(err)
         return res.status(200).json(data[0])
@@ -57,9 +57,9 @@ export const deletePost=(req,res)=>{
 
     const postId =req.params.id
         const q1="SELECT `img` FROM posts WHERE `id`=?"
-        let f
         db.query(q1,[postId],(err,data)=>{
-            if(err) console.log('无法找到该图片err')
+            if(err) {console.log('无法找到该图片err')
+                return res.json(err)}
             fs.unlink('../client/public/upload/'+data[0].img,(err)=>{
                 if(err) console.log('无法删除文件'+err)
             })
@@ -79,12 +79,21 @@ export const updatePost=(req,res)=>{
         if (err) return res.status(403).json("Token is not valid!");
 
         const postId = req.params.id;
-        const q =
-            "UPDATE posts SET `title`=?,`desc`=?,`img`=?,`cat`=? WHERE `id` = ? AND `uid` = ?";
+        // console.log(req)
+        const q1="SELECT `img` FROM posts WHERE `id`=?"
+        db.query(q1,[postId],(err,data)=>{
+            if(err) {console.log('无法找到该图片err')
+                return res.json(err)}
+            if(req.body.img!==data[0].img)fs.unlink('../client/public/upload/'+data[0].img,(err)=>{
+                if(err) console.log('无法删除文件'+err)
+            })
+        })
+        const q2 =
+            "UPDATE posts SET `title`=?,`desc`=?,`img`=?,`cat`=?,`introduction`=?,`tags`=? WHERE `id` = ? AND `uid` = ?";
 
-        const values = [req.body.title, req.body.desc, req.body.img, req.body.cat];
+        const values = [req.body.title, req.body.desc, req.body.img, req.body.cat,req.body.intro,req.body.tags];
 
-        db.query(q, [...values, postId, userInfo.id], (err, data) => {
+        db.query(q2, [...values, postId, userInfo.id], (err, data) => {
             if (err) return res.status(500).json(err);
             return res.json("Post has been updated.");
         });
