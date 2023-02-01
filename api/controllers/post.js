@@ -1,5 +1,6 @@
 import {db} from "../db.js"
 import jwt from "jsonwebtoken"
+import fs from "fs"
 export const getPosts=(req,res)=>{
     const q=req.query.cat ? "SELECT * FROM posts WHERE cat=?"
         :"SELECT * FROM posts"
@@ -11,7 +12,7 @@ export const getPosts=(req,res)=>{
 
 }
 export const getPost=(req,res)=>{
-    const q ="SELECT p.id, `username`, `title`, `desc`, p.img ,u.img AS userImg,`cat`, `date` FROM users u JOIN posts p ON u.id=p.uid WHERE p.id= ?"
+    const q ="SELECT p.id, `introduction`,`username`, `title`, `desc`, p.img ,u.img AS userImg,`cat`, `date` FROM users u JOIN posts p ON u.id=p.uid WHERE p.id= ?"
     db.query(q,[req.params.id],(err,data)=>{
         if(err) return res.status(500).json(err)
         return res.status(200).json(data[0])
@@ -27,7 +28,7 @@ export const addPost=(req,res)=>{
         if (err) return res.status(403).json("Token is not valid!");
 
         const q =
-            "INSERT INTO posts(`title`, `desc`, `img`, `cat`, `date`,`uid`,`tags`) VALUES (?)";
+            "INSERT INTO posts(`title`, `desc`, `img`, `cat`, `date`,`uid`,`tags`,`introduction`) VALUES (?)";
 
         const values = [
             req.body.title,
@@ -37,10 +38,12 @@ export const addPost=(req,res)=>{
             req.body.date,
             userInfo.id,
             req.body.tags,
+            req.body.intro,
         ];
+        console.log(req.body)
         db.query(q, [values], (err, data) => {
             if (err) {
-                console.log(err)
+
                 return res.status(500).json(err);}
             return res.json("Post has been created.");
         });
@@ -53,8 +56,16 @@ export const deletePost=(req,res)=>{
     if(err) return res.status(403).json("身份认证不合法")
 
     const postId =req.params.id
-    const q ="DELETE FROM posts WHERE `id` = ? AND `uid` = ?"
-         db.query(q,[postId,userInfo.id],(err,data)=>{
+        const q1="SELECT `img` FROM posts WHERE `id`=?"
+        let f
+        db.query(q1,[postId],(err,data)=>{
+            if(err) console.log('无法找到该图片err')
+            fs.unlink('../client/public/upload/'+data[0].img,(err)=>{
+                if(err) console.log('无法删除文件'+err)
+            })
+        })
+    const q2 ="DELETE FROM posts WHERE `id` = ? AND `uid` = ?"
+         db.query(q2,[postId,userInfo.id],(err,data)=>{
              if(err) return res.status(403).json("你只能删除你自己的文章")
              return res.json("文章已被删除")
          })
