@@ -1,14 +1,13 @@
 import React, {useState,useRef,useEffect} from "react";
 import axios from "axios";
-import {useLocation, useNavigate} from "react-router-dom";
+import {useLocation} from "react-router-dom";
 import moment from "moment";
 import MDEditor from '@uiw/react-md-editor';
 import {CheckOutlined  } from '@ant-design/icons';
-import {Button, message, Modal, Radio, theme } from 'antd';
-import { Tag, Space,Input } from 'tdesign-react';
+import {Button, message, Modal, Radio } from 'antd';
+import { Tag,Input } from 'tdesign-react';
 import { DiscountIcon, AddIcon } from 'tdesign-icons-react';
 import 'tdesign-react/es/style/index.css';
-// import DOMPurify from "dompurify";
 const Write =()=>{
     const state = useLocation().state;
     const [value, setValue] = useState(state?.desc || "");
@@ -18,15 +17,18 @@ const Write =()=>{
     //文件手动上传
     const [uploading, setUploading] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isModalOpen2, setIsModalOpen2] = useState(false);
-    const [confirmLoading, setConfirmLoading] = useState(false);
-
+    const [upImg,setupImg]=useState(false)
     const [inputVisible, toggleInputVisible] = useState(false);
     const [tagList, setTagList] = useState([]);
 
-    /**
-     * @param {number} i
-     */
+    const[imgvalue,setimgvalue]=useState('')
+
+    const tagListname=tagList.map((ob)=>{
+    return ob.name
+     })
+     const taginfo = tagListname.toString();
+    // console.log(arr1)
+
     const deleteTag = (i) => {
         const newtagList = [...tagList];
         newtagList.splice(i, 1);
@@ -42,7 +44,7 @@ const Write =()=>{
         if (value) setTagList((currentList) => currentList.concat([{ name: value, showClose: true }]));
     };
 
-    console.log(tagList)
+    // console.log(tagList)
 
     const options = [
         {
@@ -69,8 +71,7 @@ const Write =()=>{
 
     // console.log(file)
 
-
-    const upload= async ()=>{
+    const upload= async (e)=>{
         // const formData = new FormData();
         // fileList.forEach((file) => {
         //     formData.append('file', file);
@@ -97,13 +98,14 @@ const Write =()=>{
 
     const handleClick = async e=> {
         try {
-            const imgUrl = await upload();
+            const imgUrl =await upload()
             state
                 ? await axios.put(`/posts/${state.id}`, {
                     title,
                     desc: value,
                     cat,
                     img: file ? imgUrl : "",
+                    tags:taginfo,
                 })
                 : await axios.post(`/posts/`, {
                     title,
@@ -111,46 +113,34 @@ const Write =()=>{
                     cat,
                     img: file ? imgUrl : "",
                     date: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
+                   tags:taginfo,
                 });
-            console.log(imgUrl)
             message.success('发布成功');
+            setUploading(false);
         } catch (err) {
             message.error('发布失败');
             console.log(err);
+            setUploading(false);
         }
     }
 
     const handleImgUpload = async () => {
         setUploading(true);
         await handleClick()
-        setUploading(false);
-
     }
 
     const showModal = () => {
         setIsModalOpen(true);
     };
     const handleOk = () => {
-        setConfirmLoading(true);
         setTimeout(() => {
             setIsModalOpen(false);
-            setConfirmLoading(false);
         }, 2000)
         handleImgUpload()
     };
     const handleCancel = () => {
         setIsModalOpen(false);
     };
-    const showModal2 = () => {
-        setIsModalOpen2(true);
-    };
-    const handleOk2 = () => {
-        setIsModalOpen2(false);
-    };
-    const handleCancel2 = () => {
-        setIsModalOpen2(false);
-    };
-
     const getText = (html) =>{
         const doc = new DOMParser().parseFromString(html, "text/html")
         return doc.body.textContent
@@ -158,9 +148,6 @@ const Write =()=>{
     return<div className='writediv'>
         <Modal centered={true} title="注意" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} okText="确认" cancelText="取消">
             <p>确认要发布吗？</p>
-        </Modal>
-        <Modal centered={true} title="恭喜" open={isModalOpen2} onOk={handleOk2} onCancel={handleCancel2} okText="确认" cancelText="取消">
-            <p>发布成功</p>
         </Modal>
         <div className='writecontent'>
             <div className='titlediv'><p>标题:</p><input type="text" value={getText(title)} placeholder='请输入标题' onChange={e=>setTitle(e.target.value)}/></div>
@@ -170,9 +157,14 @@ const Write =()=>{
         </div>
         <div className='menu'>
             <div className='item1'>
-                <input style={{display:"none"}} type="file" name="" id="file" onChange={e=>setFile(e.target.files[0])}/>
-                {file ? null :<div className='uploadDiv'><label className='label1' htmlFor="file">点击上传背景(只能上传一张图片)(png/jpg/jpeg)</label></div>}
-                {!file ? null :<div className='uploadDiv'><label className='label1'><CheckOutlined />上传成功<Button onClick={e=>setFile(null)}>取消上传</Button></label></div>}
+                <input style={{display:"none"}} type="file" name="" id="file" value={imgvalue} onChange={e=>{setFile(e.target.files[0])
+                setupImg(true)
+                }}/>
+                {!upImg && <div className='uploadDiv'><label className='label1' htmlFor="file">点击上传背景(只能上传一张图片)(png/jpg/jpeg)</label></div>}
+                {upImg && <div className='uploadDiv'><label className='label1'><CheckOutlined />上传成功<Button onClick={e=>{setFile(null)
+                setupImg(false)
+                    setimgvalue('')
+                }}>取消上传</Button></label></div>}
             </div>
             <div className='item2'>
                 <h1>请选择上传组别</h1>
@@ -202,7 +194,6 @@ const Write =()=>{
                                 style={{ marginRight: 20,marginBottom:15 }}
                             >
                                 {tag.name}
-                                {i}
                             </Tag>
                         ))}
                     </div>
@@ -218,7 +209,7 @@ const Write =()=>{
                 </div>
             </div>
             <div className='uploadButton'>
-            <Button size='large'>保存草稿</Button>
+            <Button size='large' onClick={()=>{message.info('肥肠抱歉保存草稿功能还在完善中>_<')}}>保存草稿</Button>
             <Button
                 type="primary"
                 onClick={showModal}

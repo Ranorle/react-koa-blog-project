@@ -19,6 +19,7 @@
     "react-router-dom": "^6.8.0",
     "react-scripts": "5.0.1",
     "sass": "^1.57.1",
+    "tdesign-icons-react": "^0.1.7",
     "tdesign-react": "^0.45.4",
     "web-vitals": "^2.1.4"
   },
