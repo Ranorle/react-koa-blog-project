@@ -24,24 +24,37 @@ const Home =()=>{
         return doc.body.textContent
     }
 
-
+    // const BlogCards = () => {
+    //     return <Link className='CardDivs' to={`/post/${post.id}`}>
+    //         <div className='CardImg'>
+    //             <img className='BlogImg' src={`../upload/${post.img}`}></img>
+    //         </div>
+    //         <div className='CardInfo'>
+    //             <div className='CardTitle'><span>{getText(post.title)}</span></div>
+    //             <div className='CardInfomin'>
+    //                 <div className='CardComment'>{getText(post.desc)}</div>
+    //                 <div className='CardInfodet'>{post.date}</div>
+    //             </div>
+    //         </div>
+    //     </Link>
+    // }
 
     return<div className='home'>
         <div className='posts'>
             {
                 posts.map(post=>(
-                <div className='post' key={post.id}>
-                    <div className='img'>
-                        <img src={`../upload/${post.img}`} alt=""></img>
-                    </div>
-                    <div className='postcontent'>
-                        <Link className='link' to={`/post/${post.id}`}>
-                            <h1>{getText(post.title)}</h1>
-                            <p>{getText(post.desc)}</p>
-                            <button>详细阅读</button>
-                        </Link>
-                    </div>
-                </div>
+                    <Link className='CardDivs' to={`/post/${post.id}`}>
+                        <div className='CardImg'>
+                            <img className='BlogImg' src={`../upload/${post.img}`}></img>
+                        </div>
+                        <div className='CardInfo'>
+                            <div className='CardTitle'><span>{getText(post.title)}</span></div>
+                            <div className='CardInfomin'>
+                                <div className='CardComment'>{getText(post.desc)}</div>
+                                <div className='CardInfodet'>{post.date}</div>
+                            </div>
+                        </div>
+                    </Link>
                 ))
             }
         </div>

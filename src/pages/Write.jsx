@@ -22,12 +22,12 @@ const Write =()=>{
     const [tagList, setTagList] = useState([]);
 
     const[imgvalue,setimgvalue]=useState('')
-
+    const[intro,setIntro]=useState(state?.introduction || '懒得写简介了')
     const tagListname=tagList.map((ob)=>{
     return ob.name
      })
      const taginfo = tagListname.toString();
-    // console.log(arr1)
+    console.log(intro)
 
     const deleteTag = (i) => {
         const newtagList = [...tagList];
@@ -69,23 +69,7 @@ const Write =()=>{
         },
     ];
 
-    // console.log(file)
-
     const upload= async (e)=>{
-        // const formData = new FormData();
-        // fileList.forEach((file) => {
-        //     formData.append('file', file);
-        // });
-        // try{
-        //     await axios.post('/upload',formData).then((res) => {
-        //         setFileList([]);
-        //         setUploading(false);
-        //         return res.data
-        //     })
-        // }catch (err) {
-        //     message.error('发布失败');
-        //     console.log(err);
-        // }
         try{
             const formData =new FormData()
             formData.append("file",file)
@@ -106,6 +90,7 @@ const Write =()=>{
                     cat,
                     img: file ? imgUrl : "",
                     tags:taginfo,
+                    intro:intro,
                 })
                 : await axios.post(`/posts/`, {
                     title,
@@ -114,6 +99,7 @@ const Write =()=>{
                     img: file ? imgUrl : "",
                     date: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
                    tags:taginfo,
+                    intro:intro,
                 });
             message.success('发布成功');
             setUploading(false);
@@ -151,6 +137,7 @@ const Write =()=>{
         </Modal>
         <div className='writecontent'>
             <div className='titlediv'><p>标题:</p><input type="text" value={getText(title)} placeholder='请输入标题' onChange={e=>setTitle(e.target.value)}/></div>
+            <div className='titlediv'><p>简介:</p><input type="text" placeholder='请输入简介' value={getText(intro)} onChange={e=>setIntro(e.target.value)}/></div>
             <div className="editorContainer">
                 <MDEditor  height={600} className="editor" theme="snow" value={value} onChange={setValue} />
             </div>
@@ -160,7 +147,8 @@ const Write =()=>{
                 <input style={{display:"none"}} type="file" name="" id="file" value={imgvalue} onChange={e=>{setFile(e.target.files[0])
                 setupImg(true)
                 }}/>
-                {!upImg && <div className='uploadDiv'><label className='label1' htmlFor="file">点击上传背景(只能上传一张图片)(png/jpg/jpeg)</label></div>}
+                {!upImg && state && <div className='uploadDiv'><label className='label1' htmlFor="file"><p>点击更改背景(只能上传一张图片)(png/jpg/jpeg)</p></label></div>}
+                {!upImg && !state && <div className='uploadDiv'><label className='label1' htmlFor="file"><p>点击上传背景(只能上传一张图片)(png/jpg/jpeg)</p></label></div>}
                 {upImg && <div className='uploadDiv'><label className='label1'><CheckOutlined />上传成功<Button onClick={e=>{setFile(null)
                 setupImg(false)
                     setimgvalue('')
@@ -171,7 +159,9 @@ const Write =()=>{
                 <div className="cat">
                     <Radio.Group name="radiogroup" defaultValue={1}>
                         {options.map((item) => (
-                            <Radio key={item.value} value={cat} onChange={(value) => {setCat(value)}} value={item.value} >
+                            <Radio key={item.value} value={cat} onChange={(value) => {
+                                console.log(value)
+                                setCat(value.target.value)}} value={item.value} >
                                 {item.label}
                             </Radio>
                         ))}
@@ -199,9 +189,9 @@ const Write =()=>{
                     </div>
                     <div style={{ display: 'flex', cursor: 'pointer' }}>
                         {inputVisible ? (
-                            <Input onBlur={handleInputEnter} onEnter={handleInputEnter} style={{ width: '94px' }} />
+                            <Input onBlur={handleInputEnter} onEnter={handleInputEnter} style={{width: '94px' }} />
                         ) : (
-                            <Tag size="large" onClick={handleClickAdd} icon={<AddIcon />}>
+                            <Tag size="large" onClick={handleClickAdd} style={{margin:'0px'}} icon={<AddIcon />}>
                                 可添加标签
                             </Tag>
                         )}
