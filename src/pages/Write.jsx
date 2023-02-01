@@ -158,7 +158,7 @@ const Write =()=>{
             <div className='titlediv'><p>标题:</p><input type="text" value={getText(title)} placeholder='请输入标题' onChange={e=>setTitle(e.target.value)}/></div>
             <div className='titlediv'><p>简介:</p><input type="text" placeholder='请输入简介' value={getText(intro)} onChange={e=>setIntro(e.target.value)}/></div>
             <div className="editorContainer">
-                <MDEditor  height={600} className="editor" theme="snow" value={value} onChange={setValue} />
+                <MDEditor  height={506} className="editor" theme="snow" value={value} onChange={setValue} />
             </div>
         </div>
         <div className='menu'>
