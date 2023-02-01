@@ -27,7 +27,7 @@ export const addPost=(req,res)=>{
         if (err) return res.status(403).json("Token is not valid!");
 
         const q =
-            "INSERT INTO posts(`title`, `desc`, `img`, `cat`, `date`,`uid`) VALUES (?)";
+            "INSERT INTO posts(`title`, `desc`, `img`, `cat`, `date`,`uid`,`tags`) VALUES (?)";
 
         const values = [
             req.body.title,
@@ -36,10 +36,12 @@ export const addPost=(req,res)=>{
             req.body.cat,
             req.body.date,
             userInfo.id,
+            req.body.tags,
         ];
-
         db.query(q, [values], (err, data) => {
-            if (err) return res.status(500).json(err);
+            if (err) {
+                console.log(err)
+                return res.status(500).json(err);}
             return res.json("Post has been created.");
         });
     });
