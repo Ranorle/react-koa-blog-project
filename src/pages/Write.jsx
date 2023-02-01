@@ -10,6 +10,15 @@ import { DiscountIcon, AddIcon } from 'tdesign-icons-react';
 import 'tdesign-react/es/style/index.css';
 const Write =()=>{
     const state = useLocation().state;
+    let tagsinfo=[]
+    function a(){
+        let v=[]
+        if(state) v=state.tags.split(',')
+        tagsinfo=v.map((prop)=>{
+            return {name:prop,showClose:true}
+        })
+    }
+    a()
     const [value, setValue] = useState(state?.desc || "");
     const [title, setTitle] = useState(state?.title || "");
      const [file, setFile] = useState(null);
@@ -19,15 +28,25 @@ const Write =()=>{
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [upImg,setupImg]=useState(false)
     const [inputVisible, toggleInputVisible] = useState(false);
-    const [tagList, setTagList] = useState([]);
-
+    const [tagList, setTagList] = useState(tagsinfo);
     const[imgvalue,setimgvalue]=useState('')
     const[intro,setIntro]=useState(state?.introduction || '懒得写简介了')
+    let disabled=true
+    function disabled1(){
+        if(title && value && cat) disabled= false
+        if(!(title && value && cat))disabled=true
+    }
+    disabled1()
     const tagListname=tagList.map((ob)=>{
     return ob.name
      })
      const taginfo = tagListname.toString();
-    console.log(intro)
+
+    function catinfo(){
+        if(state) return state.cat
+        return ''
+    }
+
 
     const deleteTag = (i) => {
         const newtagList = [...tagList];
@@ -88,7 +107,7 @@ const Write =()=>{
                     title,
                     desc: value,
                     cat,
-                    img: file ? imgUrl : "",
+                    img: file ? imgUrl : state.img,
                     tags:taginfo,
                     intro:intro,
                 })
@@ -96,7 +115,7 @@ const Write =()=>{
                     title,
                     desc: value,
                     cat,
-                    img: file ? imgUrl : "",
+                    img: file ? imgUrl : '',
                     date: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
                    tags:taginfo,
                     intro:intro,
@@ -157,11 +176,12 @@ const Write =()=>{
             <div className='item2'>
                 <h1>请选择上传组别</h1>
                 <div className="cat">
-                    <Radio.Group name="radiogroup" defaultValue={1}>
+                    <Radio.Group name="radiogroup" defaultValue={catinfo}>
                         {options.map((item) => (
-                            <Radio key={item.value} value={cat} onChange={(value) => {
-                                console.log(value)
-                                setCat(value.target.value)}} value={item.value} >
+                            <Radio key={item.value}  onChange={(value) => {
+                                // console.log(value)
+                                setCat(value.target.value)}}
+                                   value={item.value} >
                                 {item.label}
                             </Radio>
                         ))}
@@ -199,11 +219,11 @@ const Write =()=>{
                 </div>
             </div>
             <div className='uploadButton'>
-            <Button size='large' onClick={()=>{message.info('肥肠抱歉保存草稿功能还在完善中>_<')}}>保存草稿</Button>
+            <Button size='large' onClick={()=>{message.info('肥肠抱歉,保存草稿功能还在完善中>_<')}}>保存草稿</Button>
             <Button
                 type="primary"
                 onClick={showModal}
-                // disabled={fileList.length === 0}
+                disabled={disabled}
                 loading={uploading}
                 size='large'
             >

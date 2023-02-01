@@ -25,8 +25,6 @@ const Single =()=>{
         "img": ""
     }
 
-    // console.log(currentUser)
-
     useEffect(()=>{
         const fetchData = async () => {
             try {
