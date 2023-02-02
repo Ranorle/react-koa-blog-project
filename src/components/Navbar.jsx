@@ -92,7 +92,7 @@ const Navbar =()=>{
                     <img src={currentUser.img}/>
                     <p>{currentUser?.username}</p>
                 </div>}
-                {currentUser ? <Button size='large' shape="round" onClick={openNotification}>登出</Button> :<Link className='link' to="/login"><Button shape="round">登录</Button></Link>}
+                {currentUser ? <Button  shape="round" onClick={openNotification}>登出</Button> :<Link className='link' to="/login"><Button shape="round">登录</Button></Link>}
                 {currentUser && <Link className='link' to="/write"><Button size='large' shape="primary" icon={<EditOutlined /> } onClick={()=>{
                     setstyle1({color:""})
                     setstyle2({color:""})
