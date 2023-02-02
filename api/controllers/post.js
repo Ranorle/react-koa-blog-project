@@ -2,7 +2,6 @@ import {db} from "../db.js"
 import jwt from "jsonwebtoken"
 import fs from "fs"
 export const getPosts=(req,res)=>{
-    let dataInfo=[]
     const q=req.query.cat ? "SELECT p.id, `introduction`,`tags`,`username`, `title`, `desc`, p.img ,u.img AS userImg,`cat`, `date` FROM users u JOIN posts p ON u.id=p.uid WHERE `cat`= ?"
         :"SELECT p.id, `introduction`,`tags`,`username`, `title`, `desc`, p.img ,u.img AS userImg,`cat`, `date` FROM users u JOIN posts p ON u.id=p.uid WHERE `cat`= ?"
         db.query(q,[req.query.cat],(err,data)=>{
@@ -23,7 +22,9 @@ export const getPost=(req,res)=>{
 export const addPost=(req,res)=>{
     const token = req.cookies.access_token;
     if (!token) return res.status(401).json("Not authenticated!");
-
+    // const x=Buffer.from(req.body.img, "latin1").toString(
+    //     "utf8"
+    // );
     jwt.verify(token, "jwtkey", (err, userInfo) => {
         if (err) return res.status(403).json("Token is not valid!");
 
@@ -54,7 +55,6 @@ export const deletePost=(req,res)=>{
     if(!token) return res.status(401).json("没有相应权限！")
     jwt.verify(token,"jwtkey",(err,userInfo)=>{
     if(err) return res.status(403).json("身份认证不合法")
-
     const postId =req.params.id
         const q1="SELECT `img` FROM posts WHERE `id`=?"
         db.query(q1,[postId],(err,data)=>{
@@ -74,7 +74,9 @@ export const deletePost=(req,res)=>{
 export const updatePost=(req,res)=>{
     const token = req.cookies.access_token;
     if (!token) return res.status(401).json("Not authenticated!");
-
+    // const x=Buffer.from(req.body.img, "latin1").toString(
+    //     "utf8"
+    // );
     jwt.verify(token, "jwtkey", (err, userInfo) => {
         if (err) return res.status(403).json("Token is not valid!");
 
