@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import axios  from "axios";
-import {Empty,Tag} from "antd"
+import {Empty, Tag, Card, Checkbox, Row, Col} from "antd"
 import dayjs from "dayjs";
 import { Pagination } from 'tdesign-react';
 const Home =()=>{
@@ -54,7 +54,7 @@ const Home =()=>{
            return<Link key={post.id} className='CardDivs' to={`/post/${post.id}`}>
                 <div className='CardImg'>
                     {post.img &&<img className='BlogImg' src={`../upload/${post.img}`}></img>}
-                    {!post.img &&<div className='Empty'><Empty description='未能找到图片' image={Empty.PRESENTED_IMAGE_SIMPLE} /></div>}
+                    {!post.img &&<div className='Empty'><Empty description='' image={Empty.PRESENTED_IMAGE_SIMPLE} /></div>}
                 </div>
                 <div className='CardInfo'>
                     <div className='CardTitle'><span>{getText(post.title)}</span></div>
@@ -63,11 +63,25 @@ const Home =()=>{
                             <p className='p1'>{getText(post.introduction)}</p>
                             <p className='p2'><span>作者:{post.username}</span> <span>标签: {tagSd}</span></p>
                         </div>
-                        <div className='CardInfodet'>发布日期:{dayjs(post.date).format("YYYY-MM-DD")}</div>
+                        <div className='CardInfodet'>{dayjs(post.date).format("YYYY-MM-DD")}</div>
                     </div>
                 </div>
             </Link>
         })
+    let f=[]
+    const checkboxs =()=>{
+        posts.map((post)=>{
+            if(post.tags) f.push(post.tags)
+        })
+        f=Array.from(new Set(f))
+        return f.map((prop)=>{
+            return<Col >
+            <Checkbox value={prop}>{prop}</Checkbox>
+        </Col>
+        })
+
+    }
+    const boxs=checkboxs()
 
     return<div className='home'>
         <div className='posts'>
@@ -79,7 +93,15 @@ const Home =()=>{
                 } showJumper />
             </div>
         </div>
-        <div className='CheckboxDiv'></div>
+        <div className='CheckboxDiv'>
+            <Card title="筛 选"  className='CardDiv'>
+                <Checkbox.Group style={{ width: '100%' }} onChange={onChange}>
+                    <Row>
+                        {boxs}
+                    </Row>
+                </Checkbox.Group>
+            </Card>
+        </div>
     </div>
 }
 export default Home

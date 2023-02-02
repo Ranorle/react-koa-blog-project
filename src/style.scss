@@ -236,18 +236,18 @@ $lightGreen: #b9e7e7;
     display: flex;
     flex-direction: column;
   justify-content: center;
-    width: 63vw;
+    width: 72vw;
     .postsDiv {
     min-height: 70vh;
 
       .CardDivs:hover {
         background-color: white;
         width: 63vw;
-        height: 120px;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.09), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
+        height: 110px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.06), 0 6px 20px 0 rgba(0, 0, 0, 0.06);
         border-style: solid;
-        border-color: silver;
-        border-width: 1.5px;
+        border-color: rgba(0,0,0,0.15);
+        border-width: 1.2px;
         transition: all .2s;
         cursor: pointer;
       }
@@ -261,18 +261,18 @@ $lightGreen: #b9e7e7;
         justify-content: left;
         background-color: white;
         width: 63vw;
-        height: 120px;
-        margin: 7.2px 12.6px;
+        height: 110px;
+        margin: 12px 12.6px;
         border-style: solid;
-        border-color: lightgray;
+        border-color: rgba(0,0,0,0.15);
         border-width: 1.2px;
-        box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.05), 0 4px 20px 0 rgba(0, 0, 0, 0.05);
+        box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.03), 0 4px 20px 0 rgba(0, 0, 0, 0.03);
         transition: all .2s;
 
         .CardImg {
           margin: 6.4px;
           width: 144px;
-          height: 104.8px;
+          height: 94.8px;
 
           .BlogImg {
             width: 100%;
@@ -293,10 +293,10 @@ $lightGreen: #b9e7e7;
           .CardTitle {
             justify-content: center;
             align-items: center;
-            padding: 12px 0px 0px 16px;
+            padding: 6px 0px 0px 14px;
 
             span {
-              font-size: 21.6px;
+              font-size: 24px;
               font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
             }
 
@@ -567,5 +567,10 @@ $lightGreen: #b9e7e7;
   }
 }
 .CheckboxDiv{
-  width: 37vw;
+  margin-top: 20px;
+  width: 28vw;
+  .CardDiv{
+  width:270px;
+    min-height: 250px;
+  }
 }

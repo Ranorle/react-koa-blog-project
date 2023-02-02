@@ -1,4 +1,5 @@
-import React, {useState,useRef,useEffect} from "react";
+import React, {useState} from "react";
+import bcrypt from "bcryptjs"
 import axios from "axios";
 import {useLocation} from "react-router-dom";
 import moment from "moment";
@@ -6,7 +7,7 @@ import MDEditor from '@uiw/react-md-editor';
 import {CheckOutlined  } from '@ant-design/icons';
 import {Button, message, Modal, Radio } from 'antd';
 import { Tag,Input } from 'tdesign-react';
-import { DiscountIcon, AddIcon } from 'tdesign-icons-react';
+import { AddIcon } from 'tdesign-icons-react';
 import 'tdesign-react/es/style/index.css';
 const Write =()=>{
     const state = useLocation().state;
@@ -87,11 +88,21 @@ const Write =()=>{
             label: '游戏',
         },
     ];
+    const salt=0
+    let hash=''
+    if(file){hash=file.name
+        hash=bcrypt.hashSync(hash,salt);
+    hash=hash+'.png'
+    }
+
+    let renameReportFile =new File([file],hash,{type:"image/png"});
+
 
     const upload= async (e)=>{
+
         try{
             const formData =new FormData()
-            formData.append("file",file)
+            formData.append("file",renameReportFile)
             const res =await axios.post("/upload",formData)
             return res.data
         }catch (err){
@@ -165,6 +176,7 @@ const Write =()=>{
             <div className='item1'>
                 <input style={{display:"none"}} type="file" name="" id="file" value={imgvalue} onChange={e=>{setFile(e.target.files[0])
                 setupImg(true)
+                    console.log(e.target.files[0])
                 }}/>
                 {!upImg && state && <div className='uploadDiv'><label className='label1' htmlFor="file"><p>点击更改背景(只能上传一张图片)(png/jpg/jpeg)</p></label></div>}
                 {!upImg && !state && <div className='uploadDiv'><label className='label1' htmlFor="file"><p>点击上传背景(只能上传一张图片)(png/jpg/jpeg)</p></label></div>}
